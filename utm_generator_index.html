@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UTM-генератор</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>UTM-генератор</h2>
+  <input id="baseUrl" type="text" placeholder="Базовая ссылка">
+  <input id="utmSource" type="text" placeholder="utm_source">
+  <input id="utmMedium" type="text" placeholder="utm_medium">
+  <input id="utmCampaign" type="text" placeholder="utm_campaign">
+  <input id="utmContent" type="text" placeholder="utm_content (необязательно)">
+  <input id="utmTerm" type="text" placeholder="utm_term (необязательно)">
+  <button onclick="generateUTM()">Сгенерировать ссылку</button>
+  <input id="resultUrl" type="text" readonly placeholder="Здесь появится готовая ссылка">
+  <button onclick="copyResult()">Скопировать</button>
+
+  <script>
+    function generateUTM() {
+      const baseUrl = document.getElementById('baseUrl').value.trim();
+      const utmSource = document.getElementById('utmSource').value.trim();
+      const utmMedium = document.getElementById('utmMedium').value.trim();
+      const utmCampaign = document.getElementById('utmCampaign').value.trim();
+      const utmContent = document.getElementById('utmContent').value.trim();
+      const utmTerm = document.getElementById('utmTerm').value.trim();
+
+      try {
+        const url = new URL(baseUrl);
+        if (utmSource) url.searchParams.set('utm_source', utmSource);
+        if (utmMedium) url.searchParams.set('utm_medium', utmMedium);
+        if (utmCampaign) url.searchParams.set('utm_campaign', utmCampaign);
+        if (utmContent) url.searchParams.set('utm_content', utmContent);
+        if (utmTerm) url.searchParams.set('utm_term', utmTerm);
+        document.getElementById('resultUrl').value = url.toString();
+      } catch {
+        alert("Введите корректную ссылку!");
+      }
+    }
+
+    function copyResult() {
+      const result = document.getElementById('resultUrl');
+      result.select();
+      document.execCommand('copy');
+      alert('Ссылка скопирована!');
+    }
+  </script>
+</body>
+</html>
